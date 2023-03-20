@@ -22,6 +22,7 @@
           apt_key:
             url: https://download.docker.com/linux/ubuntu/gpg
             state: present
+            keyring: /etc/apt/keyrings/docker.gpg
 
         - name: Execute dpkg command and register output
           shell: dpkg --print-architecture
@@ -36,12 +37,12 @@
             state: present
             update_cache: yes
             filename: docker
-        
+
         - name: Set chmod on per public key file
           file:
             dest: /etc/apt/keyrings/docker.gpg
-            mode: a+x
-        
+            mode: a+r
+
         - name: Install the latest docker version
           apt:
             name:
@@ -61,6 +62,7 @@
         - name: Add to the Docker group
           user:
             name: shirorng
-            groups: docker      
+            groups: docker
+            append: yes
 
       become: true
